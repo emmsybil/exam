@@ -1,0 +1,71 @@
+$(".sang_Calender").datetimepicker({
+	format : 'yyyy:mm:dd hh:ii',
+	language : 'zh-CN',
+	autoclose : true,
+	todayBtn : true,
+	forceParse : true,
+	showMeridian : false,
+	maxView : 'decade',
+	todayHighlight : 1
+});
+
+var dictation = {
+
+	dictationSelect : function dictationSelect() {
+
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+
+		if (startTime == "" || startTime == undefined) {
+			util.error("查询失败，开始时间为空");
+			return;
+		}
+
+		if (endTime == "" || endTime == undefined) {
+			util.error("查询失败，结束时间为空");
+			return;
+		}
+
+		var obj = new Object();
+		obj.start = startTime;
+		obj.end = endTime;
+		var json = JSON.stringify(obj);
+
+		$.ajax({
+			headers : {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json'
+			},
+			data : json,
+			type : "post",
+			url : util.basePath() + "student/selectWords",
+			success : function(message, tst, jqXHR) {
+				if (!util.checkSessionOut(jqXHR))
+					return false;
+				if (message.result == "success") {
+					util.success("查询成功", function() {
+						var text = message.object;
+						$(text).each(
+								function() {
+									var jsonobj = JSON.parse(this.words);
+								var date =this.dictationDate.substring(0,10);
+									$("#dictation-text").append(
+											"<tr><td style='width:150px;'>" + date
+													+ "</td><td>"
+													+ jsonobj.words
+													+ "</td></tr>")
+								});
+					});
+
+				} else {
+					util.error(message.messageInfo);
+				}
+			},
+			error : function() {
+				util.error("操作失败请稍后尝试");
+			}
+		});
+
+	}
+
+}

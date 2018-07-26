@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cw.portal.persistence.ScoreHistoryMapper">
+
+	<!-- 获取总数 -->
+	<select id="getCount" resultType="int">
+		select count(1) from et_score a, et_subject b, et_user c
+		<where>
+			1=1
+			<if test="examName !=null"> and a.examName=#{examName}</if>
+			<if test="subjectName != null"> and b.subjectname=#{subjectName}</if>
+			<if test="pass != null"> and a.pass=#{pass}</if>
+			and a.stuno=c.user_id
+			and a.subjectID=b.subjectid
+			and a.stuno=#{stuNo}
+		</where>
+	</select>
+
+	<!-- 分角色/分页/条件查询成绩） -->
+	<select id="getScoreByCondition" resultType="com.cw.portal.controller.action.Score">
+		select a.id, date_format(a.createTime,'%Y-%m-%d %H:%i') createTime,
+		a.creatorId, a.examName, date_format(a.examTime,'%Y-%m-%d %H:%i')
+		examTime, a.makeup, a.pass, a.passScore, a.score, a.stuno,
+		a.subjectID, b.subjectname subjectName,
+		c.true_name trueName
+		from et_score a,
+		et_subject b, et_user c
+		<where>
+			1=1
+			<if test="examName !=null"> and a.examName=#{examName}</if>
+			<if test="subjectName != null"> and b.subjectname=#{subjectName}</if>
+			<if test="pass != null"> and a.pass=#{pass}</if>
+			and a.stuno=c.user_id
+			and a.subjectID=b.subjectid
+			and a.stuno=#{stuNo}
+		</where>
+	</select>
+
+	<!-- 查出科目 -->
+	<select id="getSubject" resultType="com.cw.portal.controller.action.Subject">
+		select subjectName, subjectId
+		from et_subject
+	</select>
+
+</mapper>

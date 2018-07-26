@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cw.portal.persistence.DictationMapper">
+	<select id="getDictationByDate" resultType="com.cw.common.domain.dictation.DictationCase">
+		select a.dictationId as dictationCaseId,a.cases as cases,c.true_name as approverName 
+,DATE_FORMAT(a.approverDate,'%Y-%m-%d') as approverDate
+,b.true_name as studnetName,copyingType as copyingType from et_dictationCase a
+left join et_user b on a.studentId=b.user_id left join et_user c on a.approverId=c.user_id 
+where a.studentId=#{userId}
+	</select>
+
+	<select id="getDictationAll" resultType="com.cw.common.domain.dictation.Dictation">
+		select dictationId,studentGroupsId,words,substring(dictationDate,1,11) as dictationDate from et_dictation order By
+		dictationDate desc
+	</select>
+
+</mapper>

@@ -1,0 +1,36 @@
+package com.cw.portal.controller.action;
+/**
+*
+*@author XieRong
+*科目实体类
+*/
+public class Subject {
+
+	private int subjectId; //科目编号
+	private String subjectName; //科目名称
+	private String createTime; //创建时间
+	public int getSubjectId() {
+		return subjectId;
+	}
+	public void setSubjectId(int subjectId) {
+		this.subjectId = subjectId;
+	}
+	public String getSubjectName() {
+		return subjectName;
+	}
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	
+	@Override
+	public String toString() {
+		return "Subject [subjectId=" + subjectId + ", subjectName=" + subjectName + ", createTime=" + createTime + "]";
+	}
+	
+}

@@ -1,0 +1,42 @@
+package com.cw.portal.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cw.common.util.Page;
+import com.cw.portal.controller.action.Score;
+import com.cw.portal.controller.action.Subject;
+import com.cw.portal.persistence.ScoreHistoryMapper;
+
+/**
+*
+*@author XieRong
+*
+*/
+@Service("scoreHistoryService")
+public class ScoreHistoryServiceImpl  implements ScoreHistoryService{
+	
+	@Autowired
+	private ScoreHistoryMapper scoreHistoryMapper;
+
+	@Override
+	public List<Score> getScoreByCondition(Page<Score> page, String examName, String subjectName, String pass, int stuNo) {
+
+		return scoreHistoryMapper.getScoreByCondition(page, examName, subjectName, pass, stuNo);
+	}
+
+	@Override
+	public int getCount(String examName, String subjectName, String pass,int stuNo) {
+
+		return scoreHistoryMapper.getCount(examName, subjectName, pass, stuNo);
+	}
+
+	@Override
+	public List<Subject> getSubject() {
+
+		return scoreHistoryMapper.getSubject();
+	}
+
+}

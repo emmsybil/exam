@@ -1,0 +1,28 @@
+package com.cw.portal.persistence;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.cw.common.util.Page;
+import com.cw.portal.controller.action.Score;
+import com.cw.portal.controller.action.Subject;
+
+/**
+ *
+ * @author XieRong
+ *
+ */
+public interface ScoreHistoryMapper {
+
+	// 条件分页查询出所有学生成绩
+	public List<Score> getScoreByCondition(@Param("page") Page<Score> page, @Param("examName") String examName,
+			@Param("subjectName") String subjectName, @Param("pass") String pass, @Param("stuNo") int stuNo);
+
+	// 获取总数
+	public int getCount(@Param("examName") String examName, @Param("subjectName") String subjectName, @Param("pass") String pass, @Param("stuNo") int stuNo);
+
+	// 查询出所有科目
+	public List<Subject> getSubject();
+
+}

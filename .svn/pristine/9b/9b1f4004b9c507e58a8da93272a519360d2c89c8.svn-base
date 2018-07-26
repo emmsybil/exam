@@ -1,0 +1,89 @@
+package com.cw.portal.controller.action;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.cw.common.util.Page;
+import com.cw.common.util.PagingUtil;
+import com.cw.portal.security.UserInfo;
+import com.cw.portal.service.ScoreHistoryService;
+
+import test.entity.Score;
+import test.entity.Subject;
+
+/**
+ *
+ * @author XieRong 成绩
+ */
+@Controller
+public class ScoreAction {
+
+	@Autowired
+	private ScoreHistoryService scoreHistoryService;
+
+	@RequestMapping(value = "/student/score", method = RequestMethod.GET)
+	public String scoreListPage() {
+
+		return "redirect:score/filter-1-0.html";
+	}
+
+	/**
+	 * 分页、条件查询出学生成绩
+	 * 
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/student/score/filter-{page}-{pass}", method = RequestMethod.GET)
+	public String queryScoreByCondition(Model model, @PathVariable("page") int pageNo,
+			@PathVariable("pass") String pass, HttpServletRequest request) {
+
+		// 获取当前登录的用户信息
+		UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// 获取用户的id
+		int stuNo = userInfo.getUserid();
+		
+		String examName = request.getParameter("examName");
+		String subjectName = request.getParameter("subjectName");
+
+		if (examName == null)
+			examName = "";
+		if (subjectName == null || subjectName.equals("请选择"))
+			subjectName = "";
+		if (pass.equals("0"))
+			pass = null;
+
+		int count = scoreHistoryService.getCount(examName.equals("") ? null : examName,
+				subjectName.equals("") ? null : subjectName, pass, stuNo);
+		Page<Score> page = new Page<Score>();
+		page.setPageNo(pageNo);
+		page.setPageSize(10);
+		page.setTotalRecord(count);
+		// 分页按钮
+		String str = PagingUtil.getPageBtnlink(pageNo, page.getTotalPage());
+		List<Score> scoreList = scoreHistoryService.getScoreByCondition(page, examName.equals("") ? null : examName,
+				subjectName.equals("") ? null : subjectName, pass, stuNo);
+		List<Subject> subjectList = scoreHistoryService.getSubject();
+		model.addAttribute("subjectList", subjectList);
+		model.addAttribute("scoreList", scoreList);
+		model.addAttribute("count", count);
+		model.addAttribute("pageStr", str);
+		model.addAttribute("examName", examName);
+		model.addAttribute("pass", pass);
+		model.addAttribute("subjectName", subjectName);
+		
+		System.err.println("score:------------------->"+scoreList);
+
+		return "score";
+	};
+
+}

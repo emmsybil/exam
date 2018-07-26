@@ -1,0 +1,31 @@
+package com.cw.portal.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.cw.common.util.Page;
+
+import test.entity.Score;
+import test.entity.Subject;
+
+/**
+ *
+ * @author XieRong
+ *
+ */
+
+public interface ScoreHistoryService {
+
+	// 条件分页查询出所有学生成绩
+	public List<Score> getScoreByCondition(@Param("page") Page<Score> page, @Param("examName") String examName, 
+			@Param("subjectName") String subjectName, @Param("pass") String pass, @Param("stuNo") int stuNo);
+
+	// 获取总数
+	public int getCount(@Param("examName") String examName, @Param("subjectName") String subjectName, @Param("pass") String pass, @Param("stuNo") int stuNo);
+
+	// 查询出科目
+	public List<Subject> getSubject();
+
+	
+}

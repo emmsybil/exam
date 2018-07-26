@@ -1,0 +1,46 @@
+package com.cw.portal.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cw.common.domain.dictation.Dictation;
+import com.cw.common.domain.dictation.DictationCase;
+import com.cw.portal.persistence.DictationMapper;
+
+@Service("doctatopmServoce")
+public class DictationSrviceImpl implements DictationService {
+
+	@Autowired
+	private DictationMapper dictationMapper;
+
+	@Override
+	public List<DictationCase> getallDictationCase() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Dictation getDictationByStudentId(int studentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Dictation> getDictationByDate(String startTime, String endTime) {
+
+		if (startTime == null || startTime.length() <= 0) {
+
+			return null;
+		}
+
+		if (endTime == null || endTime.length() <= 0) {
+
+			return null;
+		}
+
+		return dictationMapper.getDictationByDate(startTime, endTime);
+	}
+
+}
